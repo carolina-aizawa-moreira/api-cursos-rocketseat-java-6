@@ -12,6 +12,9 @@ import com.rocketseat.java.group6.api_cursos.dto.CursosCreateRequestDto;
 import com.rocketseat.java.group6.api_cursos.dto.CursosCreateResponseDto;
 import com.rocketseat.java.group6.api_cursos.persistence.Curso;
 import com.rocketseat.java.group6.api_cursos.repository.CursosRepository;
+
+
+import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,6 +61,14 @@ public class CursosService {
         if(Objects.isNull(curso.getId())) {
             throw new RuntimeException("Curso not found");
         }
+    }
+
+    public List<CursoResponseDto> getAllWithFilters(final String name, final String category) {
+        final List<Curso> cursos = repository.getAllByParams(name, category);
+
+        List<CursoResponseDto> response = cursos.stream().map(curso -> toCursoResponseDto(curso)).toList();
+
+        return response;
     }
 
 
