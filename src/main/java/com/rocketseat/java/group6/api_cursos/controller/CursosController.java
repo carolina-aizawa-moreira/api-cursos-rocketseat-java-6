@@ -7,6 +7,9 @@ import com.rocketseat.java.group6.api_cursos.dto.CursosCreateRequestDto;
 import com.rocketseat.java.group6.api_cursos.dto.CursosCreateResponseDto;
 import com.rocketseat.java.group6.api_cursos.service.CursosService;
 import jakarta.validation.Valid;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,6 +71,18 @@ public class CursosController {
             return ResponseEntity.notFound().build();
         }
 
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CursoResponseDto>> getAllWithFilters(
+        @RequestParam(name = "name", required = false) String name,
+        @RequestParam(name = "category", required = false) String category) {
+        try{
+            final List<CursoResponseDto> response = service.getAllWithFilters(name, category);
+            return ResponseEntity.ok(response);
+        } catch (final Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }
