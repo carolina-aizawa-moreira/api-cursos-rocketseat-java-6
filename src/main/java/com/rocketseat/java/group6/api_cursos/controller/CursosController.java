@@ -6,6 +6,7 @@ import com.rocketseat.java.group6.api_cursos.dto.CursoUpdateResponseDto;
 import com.rocketseat.java.group6.api_cursos.dto.CursosCreateRequestDto;
 import com.rocketseat.java.group6.api_cursos.dto.CursosCreateResponseDto;
 import com.rocketseat.java.group6.api_cursos.service.CursosService;
+import com.rocketseat.java.group6.api_cursos.exceptions.NotFoundException;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -56,7 +57,7 @@ public class CursosController {
         try{
             final CursoResponseDto response = service.getById(id);
             return ResponseEntity.ok(response);
-        } catch (final Exception e) {
+        } catch (final NotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -72,7 +73,7 @@ public class CursosController {
         try{
             service.active(id, active);
             return ResponseEntity.noContent().build();
-        } catch (final Exception e) {
+        } catch (final NotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -90,7 +91,7 @@ public class CursosController {
         try{
             final CursoUpdateResponseDto response = service.update(id, request);
             return ResponseEntity.ok(response);
-        } catch (final Exception e) {
+        } catch (final NotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -105,7 +106,7 @@ public class CursosController {
         try{
             service.delete(id);
             return ResponseEntity.noContent().build();
-        } catch (final Exception e) {
+        } catch (final NotFoundException e) {
             return ResponseEntity.notFound().build();
         }
 
@@ -125,7 +126,7 @@ public class CursosController {
         try{
             final List<CursoResponseDto> response = service.getAllWithFilters(name, category);
             return ResponseEntity.ok(response);
-        } catch (final Exception e) {
+        } catch (final NotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }

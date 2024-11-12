@@ -12,6 +12,7 @@ import com.rocketseat.java.group6.api_cursos.dto.CursosCreateRequestDto;
 import com.rocketseat.java.group6.api_cursos.dto.CursosCreateResponseDto;
 import com.rocketseat.java.group6.api_cursos.persistence.Curso;
 import com.rocketseat.java.group6.api_cursos.repository.CursosRepository;
+import com.rocketseat.java.group6.api_cursos.exceptions.NotFoundException;
 
 
 import java.util.List;
@@ -59,7 +60,7 @@ public class CursosService {
 
     private void validate(final Curso curso) {
         if(Objects.isNull(curso.getId())) {
-            throw new RuntimeException("Curso not found");
+            throw new NotFoundException("Curso not found");
         }
     }
 
