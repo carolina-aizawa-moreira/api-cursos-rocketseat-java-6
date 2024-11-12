@@ -15,6 +15,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 
 @RestController
 @RequestMapping("/cursos")
@@ -23,6 +29,13 @@ public class CursosController {
     @Autowired
     private CursosService service;
 
+    @Operation(summary = "Create a new course")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Course created successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CursosCreateResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content)
+    })
     @PostMapping
     public ResponseEntity<CursosCreateResponseDto> create (@Valid @RequestBody final CursosCreateRequestDto request) {
         final CursosCreateResponseDto response = service.create(request);
@@ -30,6 +43,14 @@ public class CursosController {
         return  new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 
+
+    @Operation(summary = "Get a course by its ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Course found",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CursoResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "Course not found", content = @Content)
+    })
     @GetMapping("/{id}")
     public ResponseEntity<CursoResponseDto> getById(@PathVariable(name = "id") Long id) {
         try{
@@ -40,6 +61,11 @@ public class CursosController {
         }
     }
 
+    @Operation(summary = "Activate or deactivate a course")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Course activation updated successfully"),
+            @ApiResponse(responseCode = "404", description = "Course not found", content = @Content)
+    })
     @PatchMapping("/{id}")
     public ResponseEntity<Void> active(@PathVariable(name = "id") Long id,
                                        @RequestParam(name = "active") Boolean active) {
@@ -51,6 +77,13 @@ public class CursosController {
         }
     }
 
+    @Operation(summary = "Update a course by its ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Course updated successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CursoUpdateResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "Course not found", content = @Content)
+    })
     @PutMapping("/{id}")
     public ResponseEntity<CursoUpdateResponseDto> update(@PathVariable(name = "id") Long id,
                                                    @Valid @RequestBody final CursoUpdateRequestDto request) {
@@ -62,6 +95,11 @@ public class CursosController {
         }
     }
 
+    @Operation(summary = "Delete a course by its ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Course deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Course not found", content = @Content)
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable(name = "id") Long id) {
         try{
@@ -73,6 +111,13 @@ public class CursosController {
 
     }
 
+    @Operation(summary = "Get a list of courses with optional filters")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Courses retrieved successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CursoResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "Courses not found", content = @Content)
+    })
     @GetMapping
     public ResponseEntity<List<CursoResponseDto>> getAllWithFilters(
         @RequestParam(name = "name", required = false) String name,
